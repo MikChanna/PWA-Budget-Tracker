@@ -20,6 +20,7 @@ self.addEventListener("install", function (evt) {
   self.skipWaiting();
 });
 
+// activate
 self.addEventListener("activate", function (evt) {
   evt.waitUntil(
     caches.keys().then((keyList) => {
@@ -37,13 +38,37 @@ self.addEventListener("activate", function (evt) {
   self.clients.claim();
 });
 
-// self.addEventListener("fetch", function (evt) {
-//   // code to handle requests goes here
-//   evt.respondWith(
-//     caches.open(CACHE_NAME).then((cache) => {
-//       return cache.match(evt.request).then((response) => {
-//         return response || fetch(evt.request);
-//       });
-//     })
-//   );
-// });
+// fetch
+self.addEventListener("fetch", function (evt) {
+  const { url } = evt.request;
+  if (
+    url.includes("/api/transaction") ||
+    url.includes("/api/transaction/bulk")
+  ) {
+    evt.respondWith(
+      caches
+        .open(DATA_CACHE_NAME)
+        .them((cache) => {
+          return fetch(evt.request)
+            .then((response) => {
+              if (response.status === 200) {
+                cache.put(evt.request, response.clone());
+              }
+              return response;
+            })
+            .catch((err) => {
+              return cache.match(evt.request);
+            });
+        })
+        .catch((err) => console.log(err))
+    );
+  } else {
+    evt.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(evt.request).then((response) => {
+          return response || fetch(evt.request);
+        });
+      })
+    );
+  }
+});
