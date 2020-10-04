@@ -38,7 +38,9 @@ iOs:
 
 ## Usage Information
 
-After navigating to the app through the link or after adding it to your home page - you may add any deposits or transactions. After adding a deposit or transaction the graph will update to show you your budget across time. This app will work on and offline.
+After navigating to the app through the link, [https://shrouded-oasis-24866.herokuapp.com/], or after adding it to your home page - you may add any deposits or transactions. After adding a deposit or transaction the graph will update to show you your budget across time. This app will work on and offline.
+
+Screenshot
 
 ## Contribution
 
